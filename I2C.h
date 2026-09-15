@@ -10,6 +10,32 @@
 #include "LPC845.h"
 #include "swm.h"
 
+typedef struct
+{
+	uint32_t CFG;
+	uint32_t STAT;
+	uint32_t INTENSET;
+	uint32_t INTENCLR;
+	uint32_t TIMEOUT;
+	uint32_t CLKDIV;
+	uint32_t INSTAT;
+	uint32_t res0;
+	uint32_t MSTCTL;
+	uint32_t MSTTIME;
+	uint32_t MSTDAT;
+	uint32_t res1[5];
+	uint32_t SLVCTL;
+	uint32_t SLVDAT;
+	uint32_t SLVADR[4];
+	uint32_t SLVQUAL0;
+	uint32_t res2[9];
+	uint32_t  MONRXDAT;
+}I2C_type;
+
+#define I2C0 ((I2C_type *)0x40050000)
+#define I2C1 ((I2C_type *)0x40054000)
+#define I2C2 ((I2C_type *)0x40030000)
+#define I2C3 ((I2C_type *)0x40034000)
 
 class I2C {
 private:
