@@ -5,7 +5,7 @@
  *      Author: martina
  */
 
-#include <sensor/Color/SensorColor.h>
+#include <10-sensor/Color/SensorColor.h>
 
 uint8_t  pines[2]={
 		4,26

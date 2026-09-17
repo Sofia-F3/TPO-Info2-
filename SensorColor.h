@@ -8,8 +8,8 @@
 #ifndef _SENSOR_COLOR_SENSORCOLOR_H_
 #define _SENSOR_COLOR_SENSORCOLOR_H_
 
+#include <10-sensor/I2C/I2C.h>
 #include "LPC845.h"
-#include "I2C.h"
 #include "Gpio.h"
 
 #define DIR_Sensor 0x5A
@@ -21,7 +21,7 @@
 #define UMBRALm 200
 extern uint8_t  pines[2];
 extern uint8_t puertos[2];
-// Pines del sensor pin 2 CT/SCL y pin 3 DR/SDA y S0 tiene que ir a GND para que funciona con el microcontrolador que tiene
+
 
 class SensorColor {
 private:
