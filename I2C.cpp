@@ -5,18 +5,27 @@
  *      Author: martina
  */
 
-#include <sensor/I2C/I2C.h>
+#include "I2C.h"
 #include "LPC845.h"
+#include "Gpio.h"
 // 5-6-7-8
 I2C::I2C(uint8_t numero,uint8_t modo,uint8_t pines[], uint8_t puertos[]):
 m_numero(numero),m_modo(modo)
 {
-	for(uint8_t i=0;i<2;i++)
+		for(uint8_t i=0;i<2;i++)
 	{
 		m_pin_assign[i]=pines[i];
 		m_port[i]=puertos[i];
 	}
+	uint32_t indice_SDA=IOCON_PIO[m_port[0]][m_pin_assign[0]];
+	uint32_t indice_SCL=IOCON_PIO[m_port[1]][m_pin_assign[1]];
 	SYSCON->SYSAHBCLKCTRL0|=(1<<21)|(1<<22)|(1<<23)|(1<<5)|(1<<7);
+	SYSCON->PRESETCTRL0|=(1<<5)|(1<<21)|(1<<22)|(1<<23);
+	SYSCON->PRESETCTRL0&=~(1<<5)&~(1<<21)&~(1<<22)&~(1<<23);
+	IOCON->PIO[indice_SDA]&= ~0x418;
+	IOCON->PIO[indice_SCL]&=~0x418;
+	IOCON->PIO[indice_SDA]|=0x410;
+	IOCON->PIO[indice_SCL]|=~0x410;
 	for(uint32_t i=0;i<4;i++)
 	{
 		SYSCON->FCLKSEL[i+5]=0x01;
@@ -26,15 +35,22 @@ m_numero(numero),m_modo(modo)
 		PINENABLE_Config(m_numero, ENABLE);
 		PINENABLE_Config(m_numero+1, ENABLE);
 	}
-	if(m_numero==I2C1_||m_numero==I2C2_||m_numero==I2C2_)
+	if(m_numero==I2C0_ || m_numero==I2C2_ || m_numero==I2C2_)
 	{
 		PINASSIGN_Config(m_numero, m_port[0], m_pin_assign[0]);
 		PINASSIGN_Config(m_numero+1, m_port[1], m_pin_assign[1]);
 	}
-	I2C0->CLKDIV=20;
-	I2C1->CLKDIV=20;
-	I2C2->CLKDIV=20;
-	I2C3->CLKDIV=20;
+	// division del clock, SCL high time (in I2C function clocks) = (CLKDIV + 1) * (MSTSCLHIGH + 2)
+	//SCL low time (in I2C function clocks) = (CLKDIV + 1) * (MSTSCLLOW + 2)
+	I2C0->CLKDIV=29;
+	I2C1->CLKDIV=29;
+	I2C2->CLKDIV=29;
+	I2C3->CLKDIV=29;
+	// tomo MSTSCLLOW Y MSTSCLHIGH como el minimo posible que es 2, poniendo un 0 en ambos
+	I2C0->MSTTIME=0;
+	I2C1->MSTTIME=0;
+	I2C2->MSTTIME=0;
+	I2C3->MSTTIME=0;
 	if(m_modo)
 	{
 		SetMaster();
@@ -42,6 +58,7 @@ m_numero(numero),m_modo(modo)
 	{
 		SetSlave();
 	}
+	SYSCON->SYSAHBCLKCTRL0&=~(1<<7);
 }
 
 void I2C:: SetMaster(void)
