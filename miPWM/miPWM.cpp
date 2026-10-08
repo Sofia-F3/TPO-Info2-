@@ -18,14 +18,23 @@ miPWM::miPWM(uint8_t puerto, uint8_t pin) :
 	SYSCON->SCTCLKDIV = 1;               // divisor
 }
 
-void miPWM::inicializar(uint32_t periodo, uint8_t duty) {
-	SetSwitchMatrizSCTOUT(m_pin, m_port, idServo -1);
+void miPWM::inicializar(uint32_t periodo, uint32_t tOn) {
+	this->stop();
+	SetSwitchMatrizSCTOUT(m_pin, m_port, idServo - 1);
 
 	SCT->CONFIG |= (1 << 0); //seteandolo como unified timer (nos interesa un único contador)
 	SCT->CONFIG |= (1 << 17); //seteandolo con auto limit (el contador vuelve a cero cuando se ejecuta el evento)
 
-	this->setPeriod(periodo);
-	this->setDutyCicle(duty);
+	//PARTE DEL PERIODO
+	SCT->MATCH[0] = periodo * (FREQ_CLOCK / 1000000); //canal 0 del match es el periodo
+	SCT->MATCHREL[0] = periodo * (FREQ_CLOCK / 1000000);
+	/*	By default event1--match1 , event2--match2 , ...*/
+	SCT->EV[0].STATE = 0xFFFFFFFF;
+	SCT->EV[0].CTRL = (1 << 12); // match "channel"  only condition
+
+	//PARTE DEL TIEMPO EN ALTO
+	SCT->MATCH[idServo] = tOn; //setear tiempo en alto
+	SCT->MATCHREL[idServo] = tOn;
 
 	/*	By default event1--match1 , event2--match2 , ...*/
 	SCT->EV[idServo].STATE = 0xFFFFFFFF;
@@ -39,6 +48,7 @@ void miPWM::inicializar(uint32_t periodo, uint8_t duty) {
 
 	SCT->RES &= ~(0b11 << ((idServo - 1) * 2)); //limpiar el res
 	SCT->RES |= (0b10 << ((idServo - 1) * 2)); //si ocurre un conflicto queda el estado inactivo
+	this->start();
 }
 
 void miPWM::stop(void) {
@@ -50,17 +60,20 @@ void miPWM::start(void) {
 }
 
 void miPWM::setPeriod(uint32_t periodo) {
+	this->stop();
 	SCT->MATCH[0] = periodo * (FREQ_CLOCK / 1000000); //canal 0 del match es el periodo
 	SCT->MATCHREL[0] = periodo * (FREQ_CLOCK / 1000000);
 	/*	By default event1--match1 , event2--match2 , ...*/
 	SCT->EV[0].STATE = 0xFFFFFFFF;
 	SCT->EV[0].CTRL = (1 << 12); // match "channel"  only condition
+	this->start();
 }
 
-void miPWM::setDutyCicle(uint8_t duty) { //duty es un PORCENTAJE
-	SCT->MATCH[idServo] = (SCT->MATCH[0] * duty) / 100; //setear tiempo en alto
-	SCT->MATCHREL[idServo] = (SCT->MATCH[0] * duty) / 100;
-
+void miPWM::setTimeOn(uint32_t tOn) {
+	this->stop();
+	SCT->MATCH[idServo] = tOn * (FREQ_CLOCK / 1000000);; //setear tiempo en alto
+	SCT->MATCHREL[idServo] = tOn * (FREQ_CLOCK / 1000000);;
+	this->start();
 }
 
 void miPWM::SetSwitchMatrizSCTOUT(uint8_t bit, uint8_t port,

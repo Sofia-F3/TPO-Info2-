@@ -17,11 +17,11 @@ class miPWM {
 	uint8_t idServo;
 public:
 	miPWM(uint8_t, uint8_t);
-	void inicializar(uint32_t, uint8_t);
+	void inicializar(uint32_t, uint32_t);
 	void stop(void);
 	void start(void);
 	void setPeriod(uint32_t);
-	void setDutyCicle(uint8_t);
+	void setTimeOn(uint32_t);
 	void SetSwitchMatrizSCTOUT(uint8_t bit, uint8_t port, uint8_t out_number);
 
 };
