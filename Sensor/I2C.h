@@ -13,6 +13,7 @@
 
 class I2C {
 private:
+	I2C_type* m_I2C;
 	uint32_t m_numero;
 	uint8_t m_modo;
 	uint8_t m_pin_assign[2];
@@ -20,8 +21,11 @@ private:
 public:
 	enum{LECTURA,ESCRITURA};
 	enum{SLAVE,MASTER};
-	enum{
+	/*enum{
 		I2C0_=PE_I2C0_SDA,I2C1_=PA_I2C1_SDA,I2C2_=PA_I2C2_SDA,I2C3_=PA_I2C3_SDA
+	};*/
+	enum{
+		I2C0_,I2C1_,I2C2_,I2C3_
 	};
 	enum{
 		DISABLE,ENABLE
