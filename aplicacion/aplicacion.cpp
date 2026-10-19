@@ -40,7 +40,7 @@ Servo servo_2 (CERRADO, PERIODO, PUERTO_2, PIN_2, ACTIVIDAD_2, CANAL_2);
 
 Timer timer (Timer::SEG, Callback);
 
-uint8_t (*servo_config[3])(uint8_t) = {NULL //ROJO      O se puede usar enum
+uint8_t (*Servo_config[3])(uint8_t) = {NULL //ROJO      O se puede usar enum
 									, NULL //VERDE     de SensorColor pero
 									, NULL}; //AZUL    restandole 1
 
