@@ -28,7 +28,7 @@ int main () {
 		}
 		if (estado > CLASIFICACION)
 		{
-			Clasific_Color ();
+			Clasific_Color (color);
 			if (timer.TmerEvent ())
 			{
 				estado = CLASIFICACION;
