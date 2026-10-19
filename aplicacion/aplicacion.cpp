@@ -62,8 +62,8 @@ void servo_config_2 (void)
 void Clasific_color (uint8_t color) {
 	if (timer == 0)
 	{
-		timer.start ();
-		servo_config[color]();
+		timer.TimerStart (DURACION);
+		servo_config [color] ();
 	}
 }
 
