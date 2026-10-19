@@ -29,7 +29,7 @@ int main () {
 		if (estado > CLASIFICACION)
 		{
 			if (servo_1.angulo == CERRADO && servo_2.angulo == CERRADO)
-				Clasific_Caja (color);
+				Clasific_caja (color);
 			if ( timer.TmerEvent() )
 			{
 				estado = CLASIFICACION;
