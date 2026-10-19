@@ -59,7 +59,7 @@ void servo_config_2 (void)
 	servo_2.on ();
 }
 
-void Clasific_color (uint8_t color) {
+void Clasific_caja (uint8_t color) {
 	if (timer == 0)
 	{
 		timer.TimerStart (DURACION);
@@ -67,8 +67,7 @@ void Clasific_color (uint8_t color) {
 	}
 }
 
-void Callback (void) {
+void Servos_Off (void) {
 	servo_1.off ();
 	servo_2.off ();
-	timer.StopTimer();
 }
