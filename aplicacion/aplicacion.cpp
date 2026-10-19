@@ -50,11 +50,11 @@ void Sheduller ( void )
 		g_perifericosTemporizados[i]->HandlerDelPeriferico();
 }
 
-void servo_config_1 (void)
+void Servo_config_1 (void)
 {
 	servo_1.on ();
 }
-void servo_config_2 (void)
+void Servo_config_2 (void)
 {
 	servo_2.on ();
 }
@@ -67,7 +67,7 @@ void Clasific_caja (uint8_t color) {
 	}
 }
 
-void Servos_Off (void) {
+void Servos_off (void) {
 	servo_1.off ();
 	servo_2.off ();
 }
