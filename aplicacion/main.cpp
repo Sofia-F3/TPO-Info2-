@@ -17,7 +17,7 @@ int main () {
 	servo_config[0] = NULL;     //configurar color asignado a cada rampa
 	servo_config[0] = NULL;		//(inicializo en cero por prevencion)
 
-	timer.TimerStart (DURACION);
+	//timer.TimerStart (DURACION);
 	SensorColor sensor(); //No se como inicializarlo (?
 
 	while (1) {
