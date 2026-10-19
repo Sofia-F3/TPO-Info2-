@@ -40,7 +40,7 @@ Servo servo_2 (CERRADO, PERIODO, PUERTO_2, PIN_2, ACTIVIDAD_2, CANAL_2);
 
 Timer timer (Timer::SEG, Callback);
 
-uint8_t (*servo_config[])(uint8_t) = {NULL //ROJO      O se puede usar enum
+uint8_t (*servo_config[3])(uint8_t) = {NULL //ROJO      O se puede usar enum
 									, NULL //VERDE     de SensorColor pero
 									, NULL}; //AZUL    restandole 1
 
@@ -59,7 +59,7 @@ void servo_config_2 (void)
 	servo_2.on ();
 }
 
-void Clasific_Caja (uint8_t color) {
+void Clasific_color (uint8_t color) {
 	if (timer == 0)
 	{
 		timer.start ();
