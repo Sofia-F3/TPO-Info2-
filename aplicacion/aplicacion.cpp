@@ -63,7 +63,7 @@ void Clasific_caja (uint8_t color) {
 	if (timer == 0)
 	{
 		timer.TimerStart (DURACION);
-		servo_config [color] ();
+		Servo_config [color] ();
 	}
 }
 
