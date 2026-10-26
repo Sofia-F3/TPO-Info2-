@@ -22,6 +22,7 @@ m_numero(numero),m_modo(modo)
 		m_port[i]=puertos[i];
 	}
 	m_I2C=I2CS[numero];
+	PINENABLE_Config(PE_ADC_11, DISABLE);
 	uint32_t indice_SDA=IOCON_PIO[m_port[0]][m_pin_assign[0]];
 	uint32_t indice_SCL=IOCON_PIO[m_port[1]][m_pin_assign[1]];
 	switch(numero)
@@ -122,11 +123,13 @@ uint8_t I2C::startRead(uint32_t direccion,uint8_t registro)
 	m_I2C->MSTCTL=3;
 	//espero a que vuelva a estar bien
 	while(!(m_I2C->STAT & 1));
+	//si no esta ok se corta la comunicacion y salis de la funcion
 	if((m_I2C->STAT&14)==0x6)
 	{
 		m_I2C->MSTCTL=4;
 		return 0;
 	}
+	//mandas el registro que vas a leer y mandas continuar
 	m_I2C->MSTDAT=registro;
 	m_I2C->MSTCTL=1;
 	while(!(m_I2C->STAT & 1));
@@ -135,6 +138,7 @@ uint8_t I2C::startRead(uint32_t direccion,uint8_t registro)
 		m_I2C->MSTCTL=4;
 		return 0;
 	}
+	//volves a mandar la direccion del esclavo pero en lectura con bit 1 en 1 con un restart con 1 en start y 1 en continue
 	m_I2C->MSTDAT=(direccion<<1)|1;
 	m_I2C->MSTCTL=3;
 	while(!(m_I2C->STAT & 1));
@@ -143,40 +147,33 @@ uint8_t I2C::startRead(uint32_t direccion,uint8_t registro)
 		m_I2C->MSTCTL=4;
 		return 0;
 	}
+	//termino la comunicacion
 	m_I2C->MSTCTL=5;
 	while(!(m_I2C->STAT & 1));
-	/*if((m_I2C->STAT&14)==0x6)
-	{
-		m_I2C->MSTCTL=4;
-		return 0;
-	}*/
 	valor_leido=m_I2C->MSTDAT;
-	/*while(!(m_I2C->STAT & 1));
-	if((m_I2C->STAT&14)==0x6)
-	{
-		m_I2C->MSTCTL=4;
-		return 0;
-	}*/
-	//m_I2C->MSTCTL=4;
-	//while(!(m_I2C->STAT & 1));
 	return valor_leido;
 }
 
 void I2C::startWrite(uint32_t direccion,uint8_t registro,uint32_t valor_escritura)
 {
+	//espero a que este todo listo para comenzar la comunicacion
 	while(!(m_I2C->STAT & 1));
+	//si esta ok para escritura entras y escribis la direccion del esclavo en modo escritura con el 0 el bit 1
 	if((m_I2C->STAT&14)==0)
 	{
 		m_I2C->MSTDAT&=~0xFF;
 		m_I2C->MSTDAT=(direccion<<1);
 		m_I2C->MSTCTL=3;
 	}
+	//esperas a que este bien
 	while(!(m_I2C->STAT & 1));
+	//si esta en NACK, fallo la comunicacion cerramos la comunicacion y salimos
 	if((m_I2C->STAT&14)==0x6)
 	{
 		m_I2C->MSTCTL=4;
 		return ;
 	}
+	//si esta ok para escritura, escribo el valor del registro al que vamos a escribir
 	if((m_I2C->STAT&14)==0x4)
 	{
 		m_I2C->MSTDAT=registro;
@@ -188,6 +185,7 @@ void I2C::startWrite(uint32_t direccion,uint8_t registro,uint32_t valor_escritur
 		m_I2C->MSTCTL=4;
 		return ;
 	}
+	//si esta ok escribis lo que haya que escribir
 	if((m_I2C->STAT&14)==0x4)
 	{
 		m_I2C->MSTDAT=valor_escritura;
@@ -199,6 +197,7 @@ void I2C::startWrite(uint32_t direccion,uint8_t registro,uint32_t valor_escritur
 		m_I2C->MSTCTL=4;
 		return ;
 	}
+	//cerras la comunicacion
 	m_I2C->MSTCTL=4;
 	while(!(m_I2C->STAT & 1));
 }
