@@ -40,6 +40,7 @@ using namespace std;
 extern Servo servo_1;
 extern Servo servo_2;
 extern Timer timer;
+extern uint8_t (*Servo_config[3])(uint8_t);
 /***********************************************************************************************************************************
  *** VARIABLES GLOBALES
  **********************************************************************************************************************************/
@@ -49,11 +50,11 @@ extern Timer timer;
  **********************************************************************************************************************************/
 void Sheduller ( void );
 
-void servo_config_1 ( void );
+void Servo_config_1 ( void );
 
-void servo_config_2 (void);
+void Servo_config_2 (void);
 
-void Clasific_Color (uint8_t color);
+void Clasific_caja (uint8_t color);
 
-void Callback (void);
+void Servos_off (void);
 #endif /* INICIALIZAR_H_ */

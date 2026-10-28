@@ -40,7 +40,7 @@ Servo servo_2 (CERRADO, PERIODO, PUERTO_2, PIN_2, ACTIVIDAD_2, CANAL_2);
 
 Timer timer (Timer::SEG, Callback);
 
-uint8_t (*servo_config[])(uint8_t) = {NULL //ROJO      O se puede usar enum
+uint8_t (*Servo_config[3])(uint8_t) = {NULL //ROJO      O se puede usar enum
 									, NULL //VERDE     de SensorColor pero
 									, NULL}; //AZUL    restandole 1
 
@@ -50,25 +50,24 @@ void Sheduller ( void )
 		g_perifericosTemporizados[i]->HandlerDelPeriferico();
 }
 
-void servo_config_1 (void)
+void Servo_config_1 (void)
 {
 	servo_1.on ();
 }
-void servo_config_2 (void)
+void Servo_config_2 (void)
 {
 	servo_2.on ();
 }
 
-void Clasific_Caja (uint8_t color) {
+void Clasific_caja (uint8_t color) {
 	if (timer == 0)
 	{
-		timer.start ();
-		servo_config[color]();
+		timer.TimerStart (DURACION);
+		Servo_config [color] ();
 	}
 }
 
-void Callback (void) {
+void Servos_off (void) {
 	servo_1.off ();
 	servo_2.off ();
-	timer.StopTimer();
 }

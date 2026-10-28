@@ -17,7 +17,7 @@ int main () {
 	servo_config[0] = NULL;     //configurar color asignado a cada rampa
 	servo_config[0] = NULL;		//(inicializo en cero por prevencion)
 
-	timer.TimerStart (DURACION);
+	//timer.TimerStart (DURACION);
 	SensorColor sensor(); //No se como inicializarlo (?
 
 	while (1) {
@@ -28,8 +28,9 @@ int main () {
 		}
 		if (estado > CLASIFICACION)
 		{
-			Clasific_Color ();
-			if (timer.TmerEvent ())
+			if (servo_1.angulo == CERRADO && servo_2.angulo == CERRADO)
+				Clasific_caja (color);
+			if ( timer.TmerEvent() )
 			{
 				estado = CLASIFICACION;
 				count_color [color - 1] ++;
