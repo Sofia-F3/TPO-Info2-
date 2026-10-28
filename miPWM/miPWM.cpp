@@ -7,20 +7,23 @@
 
 #include "miPWM.h"
 
-uint8_t miPWM::cantServos = 0;
+uint8_t miPWM::cantPWM = 0;
+
+uint8_t canalesSCT[] = {PA_SCT_OUT0, PA_SCT_OUT1, PA_SCT_OUT2, PA_SCT_OUT3, PA_SCT_OUT4, PA_SCT_OUT5, PA_SCT_OUT6};
 
 miPWM::miPWM(uint8_t puerto, uint8_t pin) :
 		m_port(puerto), m_pin(pin) {
-	cantServos++;
-	idServo = cantServos;
+	cantPWM++;
+	idPWM = cantPWM;
 	SYSCON->SYSAHBCLKCTRL0 |= (1 << 8); //el 7 es el SCT, lo habilito
 	SYSCON->SCTCLKSEL = 1;       // Selecciona el MAIN CLOCK como fuente del SCT
-	SYSCON->SCTCLKDIV = 1;               // divisor
+	SYSCON->SCTCLKDIV = 1;		 // divisor
 }
 
 void miPWM::inicializar(uint32_t periodo, uint32_t tOn) {
 	this->stop();
-	SetSwitchMatrizSCTOUT(m_pin, m_port, idServo - 1);
+	PINASSIGN_Config(canalesSCT[idPWM - 1], m_port, m_pin);
+	SYSCON->PRESETCTRL0 |= (1 << 8);	//Reset of SCT CONTROL
 
 	SCT->CONFIG |= (1 << 0); //seteandolo como unified timer (nos interesa un único contador)
 	SCT->CONFIG |= (1 << 17); //seteandolo con auto limit (el contador vuelve a cero cuando se ejecuta el evento)
@@ -33,21 +36,21 @@ void miPWM::inicializar(uint32_t periodo, uint32_t tOn) {
 	SCT->EV[0].CTRL = (1 << 12); // match "channel"  only condition
 
 	//PARTE DEL TIEMPO EN ALTO
-	SCT->MATCH[idServo] = tOn; //setear tiempo en alto
-	SCT->MATCHREL[idServo] = tOn;
+	SCT->MATCH[idPWM] = tOn; //setear tiempo en alto
+	SCT->MATCHREL[idPWM] = tOn;
 
 	/*	By default event1--match1 , event2--match2 , ...*/
-	SCT->EV[idServo].STATE = 0xFFFFFFFF;
-	SCT->EV[idServo].CTRL = (idServo << 0) | (1 << 12); // match "channel"  only condition
+	SCT->EV[idPWM].STATE = 0xFFFFFFFF;
+	SCT->EV[idPWM].CTRL = (idPWM << 0) | (1 << 12); // match "channel"  only condition
 
 	//asociar un evento a poner un 1 o un 0
-	SCT->OUT[idServo - 1].SET = (1 << 0); //el evento 0 pone un 1 en el out
-	SCT->OUT[idServo - 1].CLR = (1 << idServo); //el evento 1 pone un 0 en el out
+	SCT->OUT[idPWM - 1].SET = (1 << 0); //el evento 0 pone un 1 en el out
+	SCT->OUT[idPWM - 1].CLR = (1 << idPWM); //el evento 1 pone un 0 en el out
 
-	SCT->OUTPUT &= ~(1 << (idServo - 1)); //default en 0
+	SCT->OUTPUT &= ~(1 << (idPWM - 1)); //default en 0
 
-	SCT->RES &= ~(0b11 << ((idServo - 1) * 2)); //limpiar el res
-	SCT->RES |= (0b10 << ((idServo - 1) * 2)); //si ocurre un conflicto queda el estado inactivo
+	SCT->RES &= ~(0b11 << ((idPWM - 1) * 2)); //limpiar el res
+	SCT->RES |= (0b10 << ((idPWM - 1) * 2)); //si ocurre un conflicto queda el estado inactivo
 	this->start();
 }
 
@@ -71,42 +74,9 @@ void miPWM::setPeriod(uint32_t periodo) {
 
 void miPWM::setTimeOn(uint32_t tOn) {
 	this->stop();
-	SCT->MATCH[idServo] = tOn * (FREQ_CLOCK / 1000000);; //setear tiempo en alto
-	SCT->MATCHREL[idServo] = tOn * (FREQ_CLOCK / 1000000);;
+	SCT->MATCH[idPWM] = tOn * (FREQ_CLOCK / 1000000);
+	; //setear tiempo en alto
+	SCT->MATCHREL[idPWM] = tOn * (FREQ_CLOCK / 1000000);
+	;
 	this->start();
 }
-
-void miPWM::SetSwitchMatrizSCTOUT(uint8_t bit, uint8_t port,
-		uint8_t out_number) {
-	SYSCON->SYSAHBCLKCTRL0 |= (1 << 7);
-
-	uint8_t aux = ~(bit + port * 0x20); /*	EL REGISTRO POR DEFECTO ESTA EN 0xFF	*/
-
-	switch (out_number) {
-	case 0:
-		SWM->PINASSIGN_DATA[7] &= ~(aux << 24);
-		break;
-	case 1:
-		SWM->PINASSIGN_DATA[8] &= ~(aux << 0);
-		break;
-	case 2:
-		SWM->PINASSIGN_DATA[8] &= ~(aux << 8);
-		break;
-	case 3:
-		SWM->PINASSIGN_DATA[8] &= ~(aux << 16);
-		break;
-	case 4:
-		SWM->PINASSIGN_DATA[8] &= ~(aux << 24);
-		break;
-	case 5:
-		SWM->PINASSIGN_DATA[9] &= ~(aux << 0);
-		break;
-	case 6:
-		SWM->PINASSIGN_DATA[9] &= ~(aux << 8);
-		break;
-	}
-	SYSCON->PRESETCTRL0 |= (1 << 8);	//Reset of SCT CONTROL
-	SYSCON->SYSAHBCLKCTRL0 &= ~(1 << 7);
-
-}
-
