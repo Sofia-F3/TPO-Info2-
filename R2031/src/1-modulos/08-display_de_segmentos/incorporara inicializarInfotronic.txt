@@ -1,0 +1,32 @@
+// segmentos - uC_segmentos---------------------------------------------------------
+Gpio g_segmento_a(  Gpio::PORT1,18,Gpio::PUSHPULL,Gpio::OUTPUT,Gpio::HIGH );
+Gpio g_segmento_b(  Gpio::PORT0,18,Gpio::PUSHPULL,Gpio::OUTPUT,Gpio::HIGH );
+Gpio g_segmento_c(  Gpio::PORT0,20,Gpio::PUSHPULL,Gpio::OUTPUT,Gpio::HIGH );
+Gpio g_segmento_d(  Gpio::PORT0,22,Gpio::PUSHPULL,Gpio::OUTPUT,Gpio::HIGH );
+Gpio g_segmento_e(  Gpio::PORT0,26,Gpio::PUSHPULL,Gpio::OUTPUT,Gpio::HIGH );
+Gpio g_segmento_f(  Gpio::PORT1,19,Gpio::PUSHPULL,Gpio::OUTPUT,Gpio::HIGH );
+Gpio g_segmento_g(  Gpio::PORT1, 5,Gpio::PUSHPULL,Gpio::OUTPUT,Gpio::HIGH );
+Gpio g_segmento_dp( Gpio::PORT0,19,Gpio::PUSHPULL,Gpio::OUTPUT,Gpio::HIGH );
+
+Gpio *g_uC_segmentos[] = { &g_segmento_a,&g_segmento_b,&g_segmento_c,&g_segmento_d,&g_segmento_e,&g_segmento_f,&g_segmento_g,&g_segmento_dp,nullptr};
+uC_Segmentos g_uCSegmentos(g_uC_segmentos,g_tabla_uC);
+
+// digitos - uC_barrido -------------------------------------------------------------
+Gpio g_dgt0( Gpio::PORT1 , 16 , Gpio::PUSHPULL , Gpio::OUTPUT , Gpio::HIGH );
+Gpio g_dgt1( Gpio::PORT1 , 21 , Gpio::PUSHPULL , Gpio::OUTPUT , Gpio::HIGH );
+Gpio g_dgt2( Gpio::PORT1 , 20 , Gpio::PUSHPULL , Gpio::OUTPUT , Gpio::HIGH );
+Gpio g_dgt3( Gpio::PORT1 ,  6 , Gpio::PUSHPULL , Gpio::OUTPUT , Gpio::HIGH );
+Gpio g_dgt4( Gpio::PORT1 ,  7 , Gpio::PUSHPULL , Gpio::OUTPUT , Gpio::HIGH );
+Gpio g_dgt5( Gpio::PORT1 ,  8 , Gpio::PUSHPULL , Gpio::OUTPUT , Gpio::HIGH );
+
+Gpio *g_uC_digitos[] = { &g_dgt0,&g_dgt1,&g_dgt2,&g_dgt3,&g_dgt4,&g_dgt5};
+uC_Barrido g_uCBarrido( g_uC_digitos );
+
+GrupoDeDigitos Grupos[]=
+{
+	{ 0 , 3 },
+	{ 3 , 3 },
+	{-1 , -1 }
+};
+
+Display7Segmentos g_Display( &g_uCSegmentos , &g_uCBarrido , Grupos );
