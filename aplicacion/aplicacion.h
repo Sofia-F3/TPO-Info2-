@@ -37,9 +37,9 @@ using namespace std;
 /***********************************************************************************************************************************
  *** TIPO DE DATOS GLOBALES
  **********************************************************************************************************************************/
-extern Servo servo_1;
-extern Servo servo_2;
-extern Timer timer;
+extern Servo_1 (CERRADO, PERIODO, PUERTO_1, PIN_1, ACTIVIDAD_1, CANAL_1);
+extern Servo_2 (CERRADO, PERIODO, PUERTO_2, PIN_2, ACTIVIDAD_2, CANAL_2);
+extern Timer timer (Timer::SEG, Servos_off );
 extern uint8_t (*Servo_config[3])(uint8_t);
 /***********************************************************************************************************************************
  *** VARIABLES GLOBALES
