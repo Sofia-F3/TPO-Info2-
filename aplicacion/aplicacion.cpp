@@ -35,12 +35,12 @@
 
 #include "aplicacion.h"
 
-Servo servo_1 (CERRADO, PERIODO, PUERTO_1, PIN_1, ACTIVIDAD_1, CANAL_1);
-Servo servo_2 (CERRADO, PERIODO, PUERTO_2, PIN_2, ACTIVIDAD_2, CANAL_2);
+Servo Servo_1 (CERRADO, PERIODO, PUERTO_1, PIN_1, ACTIVIDAD_1, CANAL_1);
+Servo Servo_2 (CERRADO, PERIODO, PUERTO_2, PIN_2, ACTIVIDAD_2, CANAL_2);
 
-Timer timer (Timer::SEG, Callback);
+Timer timer (Timer::SEG, Servos_off );
 
-uint8_t (*Servo_config[3])(uint8_t) = {NULL //ROJO      O se puede usar enum
+void (*Servo_config[3])(void) = 	{NULL //ROJO      O se puede usar enum
 									, NULL //VERDE     de SensorColor pero
 									, NULL}; //AZUL    restandole 1
 
@@ -50,24 +50,23 @@ void Sheduller ( void )
 		g_perifericosTemporizados[i]->HandlerDelPeriferico();
 }
 
-void Servo_config_1 (void)
+void Servo_1_on (void)
 {
-	servo_1.on ();
+	timer.TimerStart (DURACION_1);
+	Servo_1 = ABIERTO;
 }
-void Servo_config_2 (void)
+void Servo_2_on (void)
 {
-	servo_2.on ();
+	timer.TimerStart (DURACION_2);
+	Servo_2 = ABIERTO;
 }
 
-void Clasific_caja (uint8_t color) {
-	if (timer == 0)
-	{
-		timer.TimerStart (DURACION);
-		Servo_config [color] ();
-	}
+void Clasific_caja (uint8_t color)
+{
+	Servo_config [color] ();
 }
 
 void Servos_off (void) {
-	servo_1.off ();
-	servo_2.off ();
+	Servo_1 = CERRADO;
+	Servo_2 = CERRADO;
 }
