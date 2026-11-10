@@ -37,8 +37,8 @@ void miPWM::inicializar(uint32_t periodo, uint32_t tOn) {
 	SCT->EV[0].CTRL = (1 << 12); // match 1 condition only = solo se dispara el evento cuando contador = match, sin entradas externas
 
 	//PARTE DEL TIEMPO EN ALTO
-	SCT->MATCH[idPWM] = tOn; //setear tiempo en alto
-	SCT->MATCHREL[idPWM] = tOn; //registro de reserva
+	SCT->MATCH[idPWM] = tOn * (FREQ_CLOCK / 1000000); //setear tiempo en alto
+	SCT->MATCHREL[idPWM] = tOn * (FREQ_CLOCK / 1000000); //registro de reserva
 
 	SCT->EV[idPWM].STATE = 0xFFFFFFFF; //estado = 0 SIEMPRE porque no uso la MdE
 	SCT->EV[idPWM].CTRL = (idPWM << 0) | (1 << 12); // match 1 condition only = solo se dispara el evento cuando contador = Ton, sin entradas externas
