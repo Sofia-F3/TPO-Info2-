@@ -17,7 +17,7 @@ miPWM::miPWM(uint8_t puerto, uint8_t pin) :
 	idPWM = cantPWM;
 	SYSCON->SYSAHBCLKCTRL0 |= (1 << 8); //el 7 es el SCT, lo habilito
 	SYSCON->SCTCLKSEL = 1;       // Selecciona el MAIN CLOCK como fuente del SCT
-	SYSCON->SCTCLKDIV = 1;		 // divisor
+	SYSCON->SCTCLKDIV = 1;		 // divisor lo tomo como 1, después paso de µs a ticks
 }
 
 void miPWM::inicializar(uint32_t periodo, uint32_t tOn) {
