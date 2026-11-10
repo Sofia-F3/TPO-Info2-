@@ -23,7 +23,8 @@ miPWM::miPWM(uint8_t puerto, uint8_t pin) :
 void miPWM::inicializar(uint32_t periodo, uint32_t tOn) {
 	this->stop(); //por las dudas siempre apago antes de hacer cambios
 	PINASSIGN_Config(canalesSCT[idPWM - 1], m_port, m_pin);
-	SYSCON->PRESETCTRL0 |= (1 << 8);	//Resetea el control del SCT
+	SYSCON->PRESETCTRL0 &= ~(1 << 8);  // pone el SCT en reset (0 = en reset)
+	SYSCON->PRESETCTRL0 |=  (1 << 8);  // lo saca del reset (1 = operativo)
 
 	SCT->CONFIG |= (1 << 0); //seteandolo como unified timer (nos interesa un único contador)
 	SCT->CONFIG |= (1 << 17); //seteandolo con auto limit (el contador vuelve a cero cuando se ejecuta el evento)
