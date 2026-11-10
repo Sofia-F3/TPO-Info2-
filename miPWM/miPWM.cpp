@@ -31,18 +31,17 @@ void miPWM::inicializar(uint32_t periodo, uint32_t tOn) {
 
 	//PARTE DEL PERIODO
 	SCT->MATCH[0] = periodo * (FREQ_CLOCK / 1000000); //canal 0 del match es el periodo
-	SCT->MATCHREL[0] = periodo * (FREQ_CLOCK / 1000000);
-	/*	By default event1--match1 , event2--match2 , ...*/
-	SCT->EV[0].STATE = 0xFFFFFFFF;
-	SCT->EV[0].CTRL = (1 << 12); // match "channel"  only condition
+	SCT->MATCHREL[0] = periodo * (FREQ_CLOCK / 1000000); //registro de reserva
+
+	SCT->EV[0].STATE = 0xFFFFFFFF; //estado = 0 SIEMPRE porque no uso la MdE
+	SCT->EV[0].CTRL = (1 << 12); // match 1 condition only = solo se dispara el evento cuando contador = match, sin entradas externas
 
 	//PARTE DEL TIEMPO EN ALTO
 	SCT->MATCH[idPWM] = tOn; //setear tiempo en alto
-	SCT->MATCHREL[idPWM] = tOn;
+	SCT->MATCHREL[idPWM] = tOn; //registro de reserva
 
-	/*	By default event1--match1 , event2--match2 , ...*/
-	SCT->EV[idPWM].STATE = 0xFFFFFFFF;
-	SCT->EV[idPWM].CTRL = (idPWM << 0) | (1 << 12); // match "channel"  only condition
+	SCT->EV[idPWM].STATE = 0xFFFFFFFF; //estado = 0 SIEMPRE porque no uso la MdE
+	SCT->EV[idPWM].CTRL = (idPWM << 0) | (1 << 12); // match 1 condition only = solo se dispara el evento cuando contador = Ton, sin entradas externas
 
 	//asociar un evento a poner un 1 o un 0
 	SCT->OUT[idPWM - 1].SET = (1 << 0); //el evento 0 pone un 1 en el out
@@ -65,11 +64,11 @@ void miPWM::start(void) {
 
 void miPWM::setPeriod(uint32_t periodo) {
 	this->stop();
-	SCT->MATCH[0] = periodo * (FREQ_CLOCK / 1000000); //canal 0 del match es el periodo
+	SCT->MATCH[0] = periodo * (FREQ_CLOCK / 1000000);
 	SCT->MATCHREL[0] = periodo * (FREQ_CLOCK / 1000000);
-	/*	By default event1--match1 , event2--match2 , ...*/
+	
 	SCT->EV[0].STATE = 0xFFFFFFFF;
-	SCT->EV[0].CTRL = (1 << 12); // match "channel"  only condition
+	SCT->EV[0].CTRL = (1 << 12); 
 	this->start();
 }
 
