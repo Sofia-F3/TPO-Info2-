@@ -14,9 +14,9 @@ class Servo: public miPWM {
 private:
 	uint8_t m_angulo;
 public:
-	Servo(uint8_t, uint8_t, uint8_t);
-	void setAngulo(uint8_t);
-	Servo& operator=(uint8_t);
+	Servo(uint32_t, uint8_t, uint8_t);
+	void setAngulo(uint32_t);
+	Servo& operator=(uint32_t);
 };
 
 
