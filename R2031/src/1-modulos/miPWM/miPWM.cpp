@@ -11,7 +11,7 @@
 uint8_t miPWM::cantPWM = 0;
 
 const uint8_t canalesSCT[] = { PA_SCT_OUT0, PA_SCT_OUT1, PA_SCT_OUT2,
-		PA_SCT_OUT3, PA_SCT_OUT4, PA_SCT_OUT5, PA_SCT_OUT6 };
+PA_SCT_OUT3, PA_SCT_OUT4, PA_SCT_OUT5, PA_SCT_OUT6 };
 
 #define MAX_CANALES 7
 
@@ -19,15 +19,18 @@ miPWM::miPWM(uint8_t puerto, uint8_t pin) :
 		m_port(puerto), m_pin(pin) {
 	cantPWM++;
 	idPWM = cantPWM;
+	if (idPWM > 7) { //si supero el máximo, sobreescribo el último
+		idPWM = 7;
+	}
 	SYSCON->SYSAHBCLKCTRL0 |= (1 << 8); //el 8 es el SCT, lo habilito
 	SYSCON->SCTCLKSEL = 1;       // Selecciona el MAIN CLOCK como fuente del SCT
-	SYSCON->SCTCLKDIV = 1;// divisor lo tomo como 1, después paso de µs a ticks
+	SYSCON->SCTCLKDIV = 1; // divisor lo tomo como 1, después paso de µs a ticks
 }
 
 void miPWM::inicializar(uint32_t periodo, uint32_t tOn) {
 	this->stop(); //por las dudas siempre apago antes de hacer cambios
-	PINASSIGN_Config(canalesSCT[idPWM - 1], m_port, m_pin);
 
+	PINASSIGN_Config(canalesSCT[idPWM - 1], m_port, m_pin);
 	if (idPWM == 1) { //esto es para todos los canales, así que lo hago solo una vez
 		SYSCON->PRESETCTRL0 &= ~(1 << 8); // pone el SCT en reset (0 = en reset)
 		SYSCON->PRESETCTRL0 |= (1 << 8);  // lo saca del reset (1 = operativo)
