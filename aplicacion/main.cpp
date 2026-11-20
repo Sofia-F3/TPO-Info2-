@@ -65,8 +65,8 @@ int main () {
 		  		}
 				break;
 			case APAGADO:
-				motor_cinta.ClrPin();//apagar el motor (cinta) y servos
-				Servos_off();
+				motor_cinta.ClrPin();//apaga el motor 
+				Servos_off();		//abre los servos
 				if ( !flag_aux ) 
 				{
 					flag_aux = true;
