@@ -17,24 +17,37 @@ int main () {
 	uint8_t ind_color [2];
 	uint8_t estado = 0, color = 0;
 	uint8_t mode = APAGADO;
-	bool flag_message;
+	bool flag_rx, flag_aux;
 
 	gpio motor_cinta (); //hay que inicializar lol
-	Uart Puerto_serie (Gpio::PORT0, 25, Gpio::PORT0, 24, 0, 9600,	Uart::ocho_bits, Uart::NoParidad, 4, 3); //asigno a los pines involucrados en comunicacion puerto serie como tx y rx
+	Uart Puerto_serie (Gpio::PORT0, 25, Gpio::PORT0, 24, 0, 9600,	Uart::ocho_bits, Uart::NoParidad, 4, 4); //asigno a los pines involucrados en comunicacion puerto serie como tx y rx
 
-	DigitalInputs boton ( 0 , 4 , Gpio::PUSHPULL , Gpio::LOW , MAX_BOUNCE );
+	DigitalInputs boton_on ( 0 , 4 , Gpio::PUSHPULL , Gpio::LOW , MAX_BOUNCE );
+	DigitalInputs boton_off ( 0 , 12 , Gpio::PUSHPULL , Gpio::LOW , MAX_BOUNCE );
 
 	SensorColor sensor(); //No se como inicializarlo (?
 
 	while (1) {
-		if (boton.get())
+		if (boton_on.get())
 		{
-			mode = !mode;
+			mode = ENCENDIDO;
+			flag_aux = true;
+			
 		}
+		else if (boton_off.get()) 
+		{
+			mode = APAGADO;
+			flag_aux = false;
+		}	
 		switch (mode) {
 			case ENCENDIDO:
-		     	if ( estado == CLASIFICACION && (color = sensor.getcolor()) )
+		     	if ( flag_aux ) 
 				{
+					flag_aux = false;
+					Puerto_serie.Transmit ( &mode , 1 );//envio datos a la computadora para comunicarle que no puede asignar
+				}
+				if ( estado == CLASIFICACION && (color = sensor.getcolor()) )
+				{		
 		  				estado = color;
 		  		}
 		  		if (estado > CLASIFICACION)
@@ -52,12 +65,16 @@ int main () {
 			case APAGADO:
 				motor_cinta.ClrPin();//apagar el motor (cinta) y servos
 				Servos_off();
-				Puerto_serie.Transmit ( &mode , 1 );//envio datos a la computadora para comunicarle que ya puede asignar
-				Puerto_serie.Transmit ( count_color , 3 );//envio conteo hecho
+				if ( !flag_aux ) 
+				{
+					flag_aux = true;
+					Puerto_serie.Transmit ( &mode , 1 );//envio datos a la computadora para comunicarle que no puede asignar
+					Puerto_serie.Transmit ( count_color , 3 );//envio conteo hecho
+				}
 
 				while (flag_message = !Puerto_serie.Message ( ind_color, 2) ) {} //si no recibe datos, no entra al bucle ni al if
 
-				if ( !flag_message ) //como flag_message recibio el NOT del valor de retorno, hay que implementar el doble negativo
+				if ( !flag_message ) //como flag_message recibio el NOT del valor de retorno, es activo bajo
 				{
 					servo_config[ ind_color [0] ] =  Servo_1_on; //cambiar nombre de funciones servocofig 1 y 2 en .h
 					servo_config[ ind_color [1] ] =  Servo_2_on;
