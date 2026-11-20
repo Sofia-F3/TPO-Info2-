@@ -17,7 +17,7 @@ int main () {
 	uint8_t ind_color [2];
 	uint8_t estado = CLASIFICACION, color = 0;
 	uint8_t mode = APAGADO;
-	bool flag_rx, flag_aux;
+	bool flag_rx, flag_aux = false;
 
 	gpio motor_cinta (); //hay que inicializar lol
 	Uart Puerto_serie (Gpio::PORT0, 25, Gpio::PORT0, 24, 0, 9600,	Uart::ocho_bits, Uart::NoParidad, 4, 4); //asigno a los pines involucrados en comunicacion puerto serie como tx y rx
