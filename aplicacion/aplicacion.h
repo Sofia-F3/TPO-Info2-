@@ -29,8 +29,12 @@ using namespace std;
 /***********************************************************************************************************************************
  *** DEFINES GLOBALES
  **********************************************************************************************************************************/
-#define CLASIFICACION	SensorColor::NADA
-enum Modo {APAGADO, ENCENDIDO};
+#define CLASIFICACION  SensorColor::NADA
+#define ABIERTO        45 // 
+#define CERRADO        0  //  se agregan sus valores correspondientes
+#define DURACION_1     5  //  
+#define DURACION_2     6  //
+enum Modo {APAGADO, ENCENDIDO};//
 
 /***********************************************************************************************************************************
  *** MACROS GLOBALES
