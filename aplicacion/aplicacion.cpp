@@ -67,6 +67,7 @@ void Clasific_caja (uint8_t color)
 }
 
 void Servos_off (void) {
+	timer.TimerStop ();
 	Servo_1 = CERRADO;
 	Servo_2 = CERRADO;
 }
