@@ -27,6 +27,9 @@ int main () {
 
 	SensorColor sensor(); //No se como inicializarlo (?
 
+	servo_config[ 1 ] =  Servo_1_on; //usar enum de sensor color restandole 1
+	servo_config[ 2 ] =  Servo_2_on; //sirve para elegir el color que queres para cada servo (puse esos dos pero probalos a gusto)
+
 	while (1) {
 		if (boton_on.get())
 		{
@@ -42,6 +45,8 @@ int main () {
 		
 		switch (mode) {
 			case ENCENDIDO:
+				motor_cinta.SetPin();
+				
 		     	if ( flag_aux ) 
 				{
 					flag_aux = false;
@@ -65,8 +70,8 @@ int main () {
 		  		}
 				break;
 			case APAGADO:
-				motor_cinta.ClrPin();//apaga el motor 
-				Servos_off();		//abre los servos
+				motor_cinta.ClrPin();
+				Servos_off();		
 				if ( !flag_aux ) 
 				{
 					flag_aux = true;
