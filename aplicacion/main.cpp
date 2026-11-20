@@ -39,6 +39,7 @@ int main () {
 			mode = APAGADO;
 			flag_aux = false;
 		}	
+		
 		switch (mode) {
 			case ENCENDIDO:
 		     	if ( flag_aux ) 
@@ -46,6 +47,7 @@ int main () {
 					flag_aux = false;
 					Puerto_serie.Transmit ( &mode , 1 );//envio datos a la computadora para comunicarle que no puede asignar
 				}
+				
 				if ( estado == CLASIFICACION && (color = sensor.getcolor()) )
 				{		
 		  				estado = color;
