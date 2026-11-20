@@ -15,7 +15,7 @@ int main () {
 
 	uint8_t count_color [3] = {0 , 0, 0};// (ROJO, VERDE, AZUL)
 	uint8_t ind_color [2];
-	uint8_t estado = 0, color = 0;
+	uint8_t estado = CLASIFICACION, color = 0;
 	uint8_t mode = APAGADO;
 	bool flag_rx, flag_aux;
 
