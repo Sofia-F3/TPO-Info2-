@@ -43,9 +43,9 @@ enum Modo {APAGADO, ENCENDIDO};//
 /***********************************************************************************************************************************
  *** TIPO DE DATOS GLOBALES
  **********************************************************************************************************************************/
-extern Servo_1 (CERRADO, PERIODO, PUERTO_1, PIN_1, ACTIVIDAD_1, CANAL_1);
-extern Servo_2 (CERRADO, PERIODO, PUERTO_2, PIN_2, ACTIVIDAD_2, CANAL_2);
-extern Timer timer (Timer::SEG, Servos_off );
+extern Servo Servo_1;
+extern Servo Servo_2;
+extern Timer timer;
 extern void (*Servo_config[3])(void);
 /***********************************************************************************************************************************
  *** VARIABLES GLOBALES
