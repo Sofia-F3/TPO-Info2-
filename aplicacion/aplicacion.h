@@ -63,4 +63,6 @@ void Servo_2_on (void);
 void Clasific_caja (uint8_t color);
 
 void Servos_off (void);
+
+void Dejar_pasar (void);
 #endif /* INICIALIZAR_H_ */
