@@ -71,3 +71,5 @@ void Servos_off (void) {
 	Servo_1 = CERRADO;
 	Servo_2 = CERRADO;
 }
+
+void Dejar_pasar (void) ();
