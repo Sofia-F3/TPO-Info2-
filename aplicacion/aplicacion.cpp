@@ -63,7 +63,7 @@ void Servo_2_on (void)
 
 void Clasific_caja (uint8_t color)
 {
-	Servo_config [color] ();
+	Servo_config [color - 1] ();
 }
 
 void Servos_off (void) {
