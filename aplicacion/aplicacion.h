@@ -35,6 +35,7 @@ using namespace std;
 #define DURACION_1     5  //  
 #define DURACION_2     6  //
 enum Modo {APAGADO, ENCENDIDO};//
+enum Color {ROJO, VERDE, AZUL}
 
 /***********************************************************************************************************************************
  *** MACROS GLOBALES
