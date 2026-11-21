@@ -40,9 +40,9 @@ Servo Servo_2 (CERRADO, PERIODO, PUERTO_2, PIN_2, ACTIVIDAD_2, CANAL_2);//unicas
 
 Timer timer (Timer::SEG, Servos_off );
 
-void (*Servo_config[3])(void) = 	{NULL //ROJO      O se puede usar enum
-									, NULL //VERDE     de SensorColor pero
-									, NULL}; //AZUL    restandole 1
+void (*Servo_config[3])(void) = 	{Dejar_pasar //ROJO      O se puede usar enum
+									, Dejar_pasar //VERDE     de SensorColor pero
+									, Dejar_pasar}; //AZUL    restandole 1
 
 void Sheduller ( void )
 {
