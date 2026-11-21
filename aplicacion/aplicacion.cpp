@@ -35,8 +35,8 @@
 
 #include "aplicacion.h"
 
-Servo Servo_1 (CERRADO, PERIODO, PUERTO_1, PIN_1, ACTIVIDAD_1, CANAL_1);
-Servo Servo_2 (CERRADO, PERIODO, PUERTO_2, PIN_2, ACTIVIDAD_2, CANAL_2);
+Servo Servo_1 (CERRADO, PERIODO, PUERTO_1, PIN_1, ACTIVIDAD_1, CANAL_1); //hay que inicializar.
+Servo Servo_2 (CERRADO, PERIODO, PUERTO_2, PIN_2, ACTIVIDAD_2, CANAL_2);//unicas macros implementadas: CERRADO, PERIODO
 
 Timer timer (Timer::SEG, Servos_off );
 
