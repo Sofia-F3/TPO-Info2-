@@ -34,13 +34,10 @@ int main () {
 		if (boton_on.get())
 		{
 			mode = ENCENDIDO;
-			flag_aux = true;
-			
 		}
 		else if (boton_off.get()) 
 		{
 			mode = APAGADO;
-			flag_aux = false;
 		}	
 		
 		switch (mode) {
@@ -50,7 +47,7 @@ int main () {
 		     	if ( flag_aux ) 
 				{
 					flag_aux = false;
-					Puerto_serie.Transmit ( &mode , 1 );//envio datos a la computadora para comunicarle que no puede asignar
+					Puerto_serie.Transmit ( &mode , 4 );//envio modo a la computadora, 4 datos para el formato pero otros 3 no se van a ver
 				}
 				
 				if ( estado == CLASIFICACION && (color = sensor.getcolor()) )
@@ -79,13 +76,13 @@ int main () {
 					Puerto_serie.Transmit ( count_color , 3 );//envio conteo hecho
 				}
 
-				while (flag_message = !Puerto_serie.Message ( ind_color, 2) ) {} //si no recibe datos, no entra al bucle ni al if
+				//while (flag_message = !Puerto_serie.Message ( ind_color, 2) ) {} //si no recibe datos, no entra al bucle ni al if
 
-				if ( !flag_message ) //como flag_message recibio el NOT del valor de retorno, es activo bajo
-				{
-					servo_config[ ind_color [0] ] =  Servo_1_on; //cambiar nombre de funciones servocofig 1 y 2 en .h
-					servo_config[ ind_color [1] ] =  Servo_2_on;
-				}
+				//if ( !flag_message ) //como flag_message recibio el NOT del valor de retorno, es activo bajo
+				//{
+				//	servo_config[ ind_color [0] ] =  Servo_1_on; //cambiar nombre de funciones servocofig 1 y 2 en .h
+				//	servo_config[ ind_color [1] ] =  Servo_2_on;
+				//}
 				break;
 		}
 	}
