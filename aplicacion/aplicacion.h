@@ -29,9 +29,14 @@ using namespace std;
 /***********************************************************************************************************************************
  *** DEFINES GLOBALES
  **********************************************************************************************************************************/
-#define CLASIFICACION	SensorColor::NADA
-#define APAGADO 		0
-#define ENCENDIDO		1
+#define CLASIFICACION  SensorColor::NADA
+#define ABIERTO        45 // 
+#define CERRADO        0  //  se agregan sus valores correspondientes
+#define DURACION_1     5  //  
+#define DURACION_2     6  //
+enum Modo {APAGADO, ENCENDIDO};//
+enum Color {ROJO, VERDE, AZUL}
+
 /***********************************************************************************************************************************
  *** MACROS GLOBALES
  **********************************************************************************************************************************/
@@ -39,9 +44,9 @@ using namespace std;
 /***********************************************************************************************************************************
  *** TIPO DE DATOS GLOBALES
  **********************************************************************************************************************************/
-extern Servo_1 (CERRADO, PERIODO, PUERTO_1, PIN_1, ACTIVIDAD_1, CANAL_1);
-extern Servo_2 (CERRADO, PERIODO, PUERTO_2, PIN_2, ACTIVIDAD_2, CANAL_2);
-extern Timer timer (Timer::SEG, Servos_off );
+extern Servo Servo_1;
+extern Servo Servo_2;
+extern Timer timer;
 extern void (*Servo_config[3])(void);
 /***********************************************************************************************************************************
  *** VARIABLES GLOBALES
@@ -59,4 +64,6 @@ void Servo_2_on (void);
 void Clasific_caja (uint8_t color);
 
 void Servos_off (void);
+
+void Dejar_pasar (void);
 #endif /* INICIALIZAR_H_ */
