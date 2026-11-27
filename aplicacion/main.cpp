@@ -17,7 +17,7 @@ int main () {
 	uint8_t ind_color [2];
 	uint8_t estado = CLASIFICACION, color = 0;
 	uint8_t mode = APAGADO;
-	bool flag_rx, flag_aux = false;
+	bool flag_aux = false;
 
 	gpio motor_cinta (); //hay que inicializar lol
 	Uart Puerto_serie (Gpio::PORT0, 25, Gpio::PORT0, 24, 0, 9600,	Uart::ocho_bits, Uart::NoParidad, 4, 4); //asigno a los pines involucrados en comunicacion puerto serie como tx y rx
@@ -76,13 +76,14 @@ int main () {
 					Puerto_serie.Transmit ( count_color , 3 );//envio conteo hecho
 				}
 
-				//while (flag_message = !Puerto_serie.Message ( ind_color, 2) ) {} //si no recibe datos, no entra al bucle ni al if
-
-				//if ( !flag_message ) //como flag_message recibio el NOT del valor de retorno, es activo bajo
-				//{
-				//	servo_config[ ind_color [0] ] =  Servo_1_on; //cambiar nombre de funciones servocofig 1 y 2 en .h
-				//	servo_config[ ind_color [1] ] =  Servo_2_on;
-				//}
+				if ( Puerto_serie.Message ( ind_color, 2) ) 
+				{
+					for (int i = 0; i < 3; i++);
+						servo_config [i] = Dejar_pasar;//el que no fue asignado, quedara como "Dejar_pasar"
+					
+					servo_config[ ind_color [0] ] =  Servo_1_on;
+					servo_config[ ind_color [1] ] =  Servo_2_on;
+				}
 				break;
 		}
 	}
