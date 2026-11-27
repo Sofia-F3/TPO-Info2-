@@ -78,11 +78,11 @@ int main () {
 
 				if ( Puerto_serie.Message ( ind_color, 2) ) 
 				{
-					for (int i = 0; i < 3; i++);
-						servo_config [i] = Dejar_pasar;//el que no fue asignado, quedara como "Dejar_pasar"
+					for (int i = 0; i < 3; i++)
+						Servo_config [i] = Dejar_pasar;//el que no fue asignado, quedara como "Dejar_pasar"
 					
-					servo_config[ ind_color [0] ] =  Servo_1_on;
-					servo_config[ ind_color [1] ] =  Servo_2_on;
+					Servo_config[ ind_color [0] ] =  Servo_1_on;
+					Servo_config[ ind_color [1] ] =  Servo_2_on;
 				}
 				break;
 		}
