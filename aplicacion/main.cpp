@@ -81,8 +81,8 @@ int main () {
 					for (int i = 0; i < 3; i++)
 						Servo_config [i] = Dejar_pasar;//el que no fue asignado, quedara como "Dejar_pasar"
 					
-					Servo_config[ ind_color [0] ] =  Servo_1_on;
-					Servo_config[ ind_color [1] ] =  Servo_2_on;
+					Servo_config[ ind_color [0] - 1] =  Servo_1_on;
+					Servo_config[ ind_color [1] - 1] =  Servo_2_on;
 				}
 				break;
 		}
